@@ -4,30 +4,110 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="robots" content="noindex,nofollow" />
-<title>放心智疗</title>
+<title>放心智疗 · 放疗全程智能助手</title>
 <style>
-  html, body { height: 100%; margin: 0; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; }
   body {
+    font-family: "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+    background: linear-gradient(155deg, #06222b 0%, #0a3a42 42%, #0e5548 78%, #11705a 100%);
+    color: #eef7f4;
     display: flex; align-items: center; justify-content: center;
-    background: #04141a; color: #8fb8ac;
-    font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
-    font-size: 14px; letter-spacing: .3em; text-indent: .3em;
+    overflow: hidden; position: relative;
   }
-  a { color: #2fd4a7; text-decoration: none; }
+  /* 背景光晕 */
+  .glow { position: absolute; border-radius: 50%; filter: blur(90px); opacity: .35; pointer-events: none; }
+  .g1 { width: 46vmax; height: 46vmax; background: #16a085; top: -18vmax; right: -14vmax; animation: drift 14s ease-in-out infinite alternate; }
+  .g2 { width: 34vmax; height: 34vmax; background: #0e6e8c; bottom: -14vmax; left: -10vmax; animation: drift 18s ease-in-out infinite alternate-reverse; }
+  @keyframes drift { from { transform: translate(0,0) scale(1); } to { transform: translate(-4vmax, 3vmax) scale(1.12); } }
+
+  .stage { position: relative; text-align: center; padding: 24px; max-width: 560px; width: 100%; z-index: 2; }
+
+  /* 徽标：同心圆 + 脉冲 */
+  .mark { width: 108px; height: 108px; margin: 0 auto 26px; position: relative; }
+  .mark .ring { position: absolute; inset: 0; border-radius: 50%; border: 2px solid rgba(120, 235, 200, .55); animation: pulse 2.4s ease-out infinite; }
+  .mark .ring:nth-child(2) { animation-delay: .8s; }
+  .mark .ring:nth-child(3) { animation-delay: 1.6s; }
+  @keyframes pulse { 0% { transform: scale(.62); opacity: .9; } 100% { transform: scale(1.25); opacity: 0; } }
+  .mark .core {
+    position: absolute; inset: 18px; border-radius: 50%;
+    background: radial-gradient(circle at 34% 30%, #7defc9, #16a085 58%, #0c6b52);
+    box-shadow: 0 0 34px rgba(22,160,133,.55), inset 0 0 14px rgba(255,255,255,.35);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 30px; font-weight: 700; color: #04241c; letter-spacing: 2px;
+  }
+
+  h1 { font-size: 34px; font-weight: 600; letter-spacing: 10px; text-indent: 10px; margin-bottom: 10px; }
+  .sub { font-size: 15px; letter-spacing: 3px; color: #9fd9c8; margin-bottom: 40px; }
+
+  /* 进度条 */
+  .bar { width: 220px; height: 3px; margin: 0 auto 14px; background: rgba(255,255,255,.14); border-radius: 3px; overflow: hidden; }
+  .bar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #16a085, #7defc9); border-radius: 3px; animation: load 3.8s ease forwards; }
+  @keyframes load { to { width: 100%; } }
+  .hint { font-size: 12px; color: #86b8aa; letter-spacing: 2px; min-height: 18px; }
+
+  /* 入口按钮 */
+  .doors { margin-top: 38px; display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  .door {
+    display: inline-block; padding: 13px 34px; border-radius: 999px; font-size: 15px;
+    letter-spacing: 3px; text-decoration: none; transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+  }
+  .door-main { background: linear-gradient(135deg, #17b58c, #0e8a68); color: #fff; box-shadow: 0 6px 24px rgba(22,160,133,.4); }
+  .door-main:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(22,160,133,.55); }
+  .door-vice { background: rgba(255,255,255,.08); color: #cfeee2; border: 1px solid rgba(255,255,255,.22); }
+  .door-vice:hover { background: rgba(255,255,255,.15); transform: translateY(-2px); }
+
+  footer { position: absolute; bottom: 22px; left: 0; right: 0; text-align: center; font-size: 11px; color: #6da394; letter-spacing: 2px; z-index: 2; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .glow, .mark .ring, .bar i { animation: none; }
+    .bar i { width: 100%; }
+  }
 </style>
 </head>
 <body>
-  <p id="tip">正在进入…</p>
+  <div class="glow g1"></div>
+  <div class="glow g2"></div>
+
+  <main class="stage">
+    <div class="mark" aria-hidden="true">
+      <span class="ring"></span><span class="ring"></span><span class="ring"></span>
+      <span class="core">安</span>
+    </div>
+    <h1>放心智疗</h1>
+    <p class="sub">放 疗 全 程 · 智 能 助 手</p>
+
+    <div class="bar"><i></i></div>
+    <p class="hint" id="hint">正在进入，请稍候</p>
+
+    <nav class="doors">
+      <a class="door door-main" id="goPatient" href="#" rel="noopener">患者版 · 立即进入</a>
+      <a class="door door-vice" id="goPc" href="#" rel="noopener">电脑版</a>
+    </nav>
+    <noscript>
+      <p style="margin-top:22px;font-size:13px;color:#9fd9c8">请点击上方按钮进入；若按钮无效，请在浏览器设置中开启 JavaScript。</p>
+    </noscript>
+  </main>
+
+  <footer>广西医科大学 · 放心智疗项目组</footer>
+
 <script>
 (function () {
-  /* 目标分片组装，避免明文完整地址入册 */
-  var h = ["https://", "wbapp-u8zovlkgryngjutdvt3wme", ".app.workbuddy.host", "/?sharecode="];
+  /* 目标地址分片组装，不在源码中出现完整明文 */
+  var p = ["https://", "wbapp-u8zovlkgryngjutdvt3wme", ".app.workbuddy.host"];
   var c = ["S4Q3", "WZSL", "VX"];
-  var target = h.join("") + c.join("");
-  document.getElementById("tip").innerHTML = "正在进入 <a href=\"" + target + "\" rel=\"noopener\">放心智疗 ›</a>";
-  location.replace(target);
+  var base = p.join("") + "/h5/index.html?sharecode=" + c.join("");
+  var pc = p.join("") + "/h5/pc/index.html?sharecode=" + c.join("");
+
+  var a1 = document.getElementById("goPatient");
+  var a2 = document.getElementById("goPc");
+  a1.href = base; a2.href = pc;
+
+  var tips = ["正在进入，请稍候", "正在校准疗愈通道", "即将就绪"];
+  var i = 0;
+  var t = setInterval(function () { i = (i + 1) % tips.length; document.getElementById("hint").textContent = tips[i]; }, 1300);
+  setTimeout(function () { clearInterval(t); location.replace(base); }, 4000);
 })();
 </script>
-<noscript><p>请启用 JavaScript 后刷新本页。</p></noscript>
 </body>
 </html>
