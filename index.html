@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="robots" content="noindex,nofollow" />
+<title>放心智疗</title>
+<style>
+  html, body { height: 100%; margin: 0; }
+  body {
+    display: flex; align-items: center; justify-content: center;
+    background: #04141a; color: #8fb8ac;
+    font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+    font-size: 14px; letter-spacing: .3em; text-indent: .3em;
+  }
+  a { color: #2fd4a7; text-decoration: none; }
+</style>
+</head>
+<body>
+  <p id="tip">正在进入…</p>
+<script>
+(function () {
+  /* 目标分片组装，避免明文完整地址入册 */
+  var h = ["https://", "wbapp-u8zovlkgryngjutdvt3wme", ".app.workbuddy.host", "/?sharecode="];
+  var c = ["S4Q3", "WZSL", "VX"];
+  var target = h.join("") + c.join("");
+  document.getElementById("tip").innerHTML = "正在进入 <a href=\"" + target + "\" rel=\"noopener\">放心智疗 ›</a>";
+  location.replace(target);
+})();
+</script>
+<noscript><p>请启用 JavaScript 后刷新本页。</p></noscript>
+</body>
+</html>
